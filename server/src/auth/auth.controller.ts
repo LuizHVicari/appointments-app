@@ -41,7 +41,6 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse()
   async refresh(@Body() body: RefreshDto) {
-    'aaaaaaaaaaa'
     return this.authService.refreshToken(body)
   }
 }
