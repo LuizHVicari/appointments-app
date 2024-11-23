@@ -1,20 +1,23 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { HashingServiceProtocol } from 'src/auth/hashing/hashing.service';
-import { Request } from 'express';
-import { REQUEST_TOKEN_PAYLOAD } from 'src/common/constants';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Request } from 'express'
+import { HashingServiceProtocol } from 'src/auth/hashing/hashing.service'
+import { REQUEST_TOKEN_PAYLOAD } from 'src/common/constants'
+import { Repository } from 'typeorm'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { User } from './entities/user.entity'
 
 @Injectable()
 export class UsersService {
-  
-  constructor (
+  constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly hashingService: HashingServiceProtocol
+    private readonly hashingService: HashingServiceProtocol,
   ) {}
 
   private async saveUser(user: User) {
@@ -31,11 +34,11 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const passwordHash = await this.hashingService.hash(createUserDto.password)
-    
+
     const userData = {
       name: createUserDto.name,
       email: createUserDto.email,
-      password: passwordHash
+      password: passwordHash,
     }
 
     const user = this.userRepository.create(userData)
@@ -44,15 +47,15 @@ export class UsersService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${id} user`
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return `This action removes a #${id} user`
   }
 
   findMe(request: Request) {
-    const { user } : { user: User } = request[REQUEST_TOKEN_PAYLOAD]
-    return {user}
+    const { user }: { user: User } = request[REQUEST_TOKEN_PAYLOAD]
+    return user
   }
 }

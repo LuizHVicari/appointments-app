@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:patients/controllers/auth_controller.dart';
-import 'package:logging/logging.dart';
+import 'package:patients/logger.dart';
 
 final dio = Dio(
   BaseOptions(
-    baseUrl: 'http://10.0.2.2:3000',
+    baseUrl: 'http://10.0.2.2:3000/',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 10)
   )
@@ -17,20 +15,36 @@ addInterceptors() {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) {
-        options.headers['Authorization'] = 'Bearer ${AuthController.instance.loginModel?.accessToken}';
+        final accessToken = AuthController.instance.loginModel?.accessToken;
+        if (accessToken != null && accessToken.isNotEmpty) {
+          options.headers['Authorization'] = 'Bearer $accessToken';
+        }
+        logger.i(options.headers);
         return handler.next(options);
       },
       onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401) {
-          log('Token expired, refreshing...', time: DateTime.now(), level: Level.FINE.value);
-          String newAccessToken = await AuthController.instance.refresh();
-          e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-          AuthController.instance.loginModel?.accessToken = newAccessToken;
-          return handler.resolve(await dio.fetch(e.requestOptions));
+        try {  
+          logger.i('Authentication error, retrying');
+          final refreshToken = AuthController.instance.loginModel?.refreshToken;
+          if (e.response?.statusCode == 401 && refreshToken != null && refreshToken.isNotEmpty) {
+            logger.i('Retrieving token from refresh', time: DateTime.now());
+
+            String newAccessToken = await AuthController.instance.refresh();
+            AuthController.instance.loginModel?.accessToken = newAccessToken;
+            e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+            
+            final response = await dio.fetch(e.requestOptions);
+            return handler.resolve(response);
+          }
+        } catch (refreshError) {
+          logger.e('Token refresh failed, $refreshError');
         }
         return handler.next(e);
       }
     )
-
   );
+
+  dio.options.validateStatus = (status) {
+    return (status! >= 200 && status < 300) || status == 401;
+  };
 }

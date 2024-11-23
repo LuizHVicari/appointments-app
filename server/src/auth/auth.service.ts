@@ -1,56 +1,66 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
-import jwtConfig from './config/jwt.config';
-import { ConfigType } from '@nestjs/config';
-import { HashingServiceProtocol } from './hashing/hashing.service';
-import { RefreshDto } from './dto/refresh.dto';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
+import { ConfigType } from '@nestjs/config'
+import { JwtService } from '@nestjs/jwt'
+import { InjectRepository } from '@nestjs/typeorm'
+import { User } from 'src/users/entities/user.entity'
+import { Repository } from 'typeorm'
+import jwtConfig from './config/jwt.config'
+import { RefreshDto } from './dto/refresh.dto'
+import { HashingServiceProtocol } from './hashing/hashing.service'
 
 @Injectable()
 export class AuthService {
-  
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtSettings: ConfigType<typeof jwtConfig>,
-    private readonly hashingService: HashingServiceProtocol
+    private readonly hashingService: HashingServiceProtocol,
   ) {}
 
   async validateUser(username: string, password: string) {
-    const user = await this.userRepository.findOneBy({
-      email: username
-    })
+    // const user = await this.userRepository.findOneBy({
+    //   email: username,
+    // })
+
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .where('LOWER(email) = LOWER(:email)', { email: username })
+      .getOne()
 
     if (!user) {
       throw new UnauthorizedException('Incorrect e-mail or password')
     }
-    if (this.hashingService.compare(password, user.password)) {
+    if (await this.hashingService.compare(password, user.password)) {
       return await this.generateTokens(user)
     }
     throw new UnauthorizedException('Incorrect e-mail or password')
   }
 
   private async generateRefreshToken(user: User) {
-    const refreshToken = this.jwtService.sign({email: user.email}, {
-      secret: this.jwtSettings.refreshSecret,
-      expiresIn: this.jwtSettings.refreshExpiresIn
-    })
+    const refreshToken = this.jwtService.sign(
+      { email: user.email },
+      {
+        secret: this.jwtSettings.refreshSecret,
+        expiresIn: this.jwtSettings.refreshExpiresIn,
+      },
+    )
 
     return refreshToken
   }
 
   private async generateAccessToken(user: User) {
-    const accessToken = this.jwtService.sign({
-        email: user.email
-      }, {
+    const accessToken = this.jwtService.sign(
+      {
+        email: user.email,
+      },
+      {
         secret: this.jwtSettings.secret,
-        expiresIn: this.jwtSettings.expiresIn
-      })
-      return accessToken
+        expiresIn: this.jwtSettings.expiresIn,
+      },
+    )
+    return accessToken
   }
 
   private async generateTokens(user: User) {
@@ -58,13 +68,13 @@ export class AuthService {
     const refreshToken = await this.generateRefreshToken(user)
     return {
       accessToken,
-      refreshToken
+      refreshToken,
     }
   }
 
   async refreshToken(body: RefreshDto) {
-    const payload: User = await this.verifyRefreshToken(body);
-    return {accessToken: await this.generateAccessToken(payload)}
+    const payload: User = await this.verifyRefreshToken(body)
+    return { accessToken: await this.generateAccessToken(payload) }
   }
 
   private async verifyRefreshToken(body: RefreshDto) {
@@ -75,7 +85,7 @@ export class AuthService {
     }
 
     const email = this.jwtService.decode(refreshToken)['email']
-    const user = await this.userRepository.findOneBy({email})
+    const user = await this.userRepository.findOneBy({ email })
 
     if (!user) {
       throw new UnauthorizedException('Invalid or expired token')
@@ -83,16 +93,17 @@ export class AuthService {
 
     try {
       this.jwtService.verify(refreshToken, {
-        secret: this.jwtSettings.refreshSecret
+        secret: this.jwtSettings.refreshSecret,
       })
       return user
     } catch (error) {
-      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      if (
+        error.name === 'JsonWebTokenError' ||
+        error.name === 'TokenExpiredError'
+      ) {
         throw new UnauthorizedException('Invalid or expired token')
       }
       throw new UnauthorizedException(error.name)
     }
   }
-
 }
-

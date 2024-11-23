@@ -26,6 +26,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse()
   async login(@Body() body: LoginDto) {
+    console.info('Login body', body)
     return this.authService.validateUser(body.email, body.password)
   }
 

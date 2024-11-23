@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:patients/logger.dart';
 import 'package:patients/models/login_model.dart';
 import 'package:patients/repositories/api_auth_repository.dart';
 import 'package:patients/repositories/auth_repository_interface.dart';
@@ -5,8 +7,8 @@ import 'package:patients/repositories/auth_repository_interface.dart';
 class AuthController {
   static AuthController instance = AuthController();
 
-  String email = '';
-  String password = '';
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   LoginModel? loginModel;
   bool isLoggedIn = false;
 
@@ -16,12 +18,10 @@ class AuthController {
     return '';
   }
 
-  Future<bool> login() async {
-    loginModel = await _authRepository.login(email, password);
-    if (loginModel == null) {
-      return false;
-    }
-    return true;
+  Future<void> login() async {
+    loginModel = await _authRepository.login(email.text, password.text);
+    logger.i('User logged in, accessToken: ${loginModel?.accessToken}');
+    logger.i(loginModel?.accessToken);
   }
 
 }
