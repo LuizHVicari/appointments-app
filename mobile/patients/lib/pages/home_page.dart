@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:patients/components/appointments_list.dart';
 import 'package:patients/components/patients_list.dart';
 import 'package:patients/constants/font_sizes.dart';
+import 'package:patients/constants/home_page_numbers.dart';
 import 'package:patients/constants/paddings.dart';
 import 'package:patients/view_models/home_view_model.dart';
 import 'package:provider/provider.dart';
 
-const int patientsPage = 0;
-const int appointmentsPage = 1;
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,28 +22,6 @@ class _HomePageState extends State<HomePage> {
     PatientsList(),
     AppointmentsList()
   ];
-
-  FloatingActionButton getFAB(BuildContext context) {
-
-    String label = '';
-    late Icon icon; 
-
-    switch (_selectedPage) {
-      case patientsPage:
-        label = 'Create patient';
-        icon = const Icon(Icons.person);
-      case appointmentsPage:
-        label = 'Create appointment';
-        icon = const Icon(Icons.event);
-    }
-
-    return FloatingActionButton.extended(
-      onPressed: () => {}, 
-      label: Text(label),
-      icon: icon,
-      foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-    ); 
-  }
 
   @override
   void initState() {
@@ -78,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           )
         ]
       ),
-      floatingActionButton: getFAB(context),
+      floatingActionButton: Provider.of<HomeViewModel>(context, listen: false).buildFab(context, _selectedPage),
       drawer: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
           return Drawer(

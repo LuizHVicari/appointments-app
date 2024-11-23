@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patients/constants/home_page_numbers.dart';
 import 'package:patients/controllers/auth_controller.dart';
 import 'package:patients/logger.dart';
 import 'package:patients/models/user_model.dart';
@@ -42,6 +43,32 @@ class HomeViewModel extends ChangeNotifier {
     AuthController.instance.loginModel?.refreshToken = '';
     notifyListeners();
     Navigator.of(context).pushReplacementNamed('/');
+
+  }
+
+  Widget buildFab(BuildContext context, int currentPage) {
+
+    String label = '';
+    String route = '';
+    late Icon icon; 
+
+    switch (currentPage) {
+      case patientsPage:
+        label = 'Create patient';
+        icon = const Icon(Icons.person);
+        route = '/createPatient';
+      case appointmentsPage:
+        label = 'Create appointment';
+        icon = const Icon(Icons.event);
+        route = '/home';
+    }
+
+    return FloatingActionButton.extended(
+      onPressed: () => Navigator.of(context).pushNamed(route), 
+      label: Text(label),
+      icon: icon,
+      foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+    ); 
 
   }
 }
