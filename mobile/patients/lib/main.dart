@@ -6,7 +6,10 @@ import 'package:patients/pages/home_page.dart';
 import 'package:patients/pages/login_page.dart';
 import 'package:patients/pages/patient_details_page.dart';
 import 'package:patients/pages/sign_up_page.dart';
+import 'package:patients/view_models/create_patient_view_model.dart';
 import 'package:patients/view_models/home_view_model.dart';
+import 'package:patients/view_models/patient_details_view_model.dart';
+import 'package:patients/view_models/patients_list_view_model.dart';
 import 'package:provider/provider.dart';
 import 'util.dart';
 import 'theme.dart';
@@ -16,6 +19,9 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<HomeViewModel>(create: (_) => HomeViewModel()),
+      ChangeNotifierProvider<PatientsListViewModel>(create: (_) => PatientsListViewModel()),
+      ChangeNotifierProvider<PatientDetailsViewModel>(create: (_) => PatientDetailsViewModel()),
+      ChangeNotifierProvider<CreatePatientViewModel>(create: (_) => CreatePatientViewModel()),
     ],
     child: const MyApp()
     )
@@ -30,7 +36,7 @@ class MyApp extends StatelessWidget {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
     TextTheme textTheme = createTextTheme(context, "Roboto", "Roboto");
 
-    AppTheme theme = AppTheme(textTheme);
+    MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: brightness == Brightness.light ? theme.light() : theme.dark(),

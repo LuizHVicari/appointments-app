@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class DefaultButton extends StatelessWidget {
   final String buttonText;
   final void Function() onPressed;
-  double? width;
-  DefaultButton({super.key, required this.buttonText, required this.onPressed, this.width,});
+  final double? width;
+  const DefaultButton({super.key, required this.buttonText, required this.onPressed, this.width,});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      child: OutlinedButton(
+      child: FilledButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primaryContainer),
-          foregroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.onPrimaryContainer),        
+          backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer),
+          foregroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.onTertiaryContainer),   
+          elevation: const WidgetStatePropertyAll(2.0)     
         ), 
-        
         child: Text(buttonText),
       ),
     );

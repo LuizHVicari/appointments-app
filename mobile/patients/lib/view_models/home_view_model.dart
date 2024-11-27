@@ -12,8 +12,6 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = true;
 
   Future<void> getUserInfo(BuildContext context) async {
-    logger.d('Fazendo requisição');
-    logger.d(user?.name);
     if (user != null) {
       return;
     }

@@ -1,20 +1,21 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigType } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule, ConfigType } from '@nestjs/config';
-import appConfig from './app.config';
-import { AuthModule } from 'src/auth/auth.module';
-import { UsersModule } from 'src/users/users.module';
+import { AuthModule } from 'src/auth/auth.module'
+import { PatientsModule } from 'src/patients/patients.module'
+import { UsersModule } from 'src/users/users.module'
+import appConfig from './app.config'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
-
+    PatientsModule,
 
     ConfigModule.forRoot({
-      envFilePath: '.env'
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(appConfig)],
@@ -24,10 +25,10 @@ import { UsersModule } from 'src/users/users.module';
           type: appSettings.database.type,
           database: appSettings.database.database,
           autoLoadEntities: appSettings.database.autoLoadEntities,
-          synchronize: appSettings.database.synchronize
+          synchronize: appSettings.database.synchronize,
         }
-      }
-    })
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

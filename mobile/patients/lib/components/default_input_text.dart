@@ -36,8 +36,9 @@ class _DefaultInputTextState extends State<DefaultInputText> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: widget.label,
-        fillColor: Theme.of(context).colorScheme.onSecondary,
-        hintText: 'E-mail',
+        fillColor: Theme.of(context).colorScheme.surface,
+        filled: true,
+        hintText: widget.label,
         suffixIcon: widget.canToggleVisibility ? GestureDetector(
           onTap: () {
             setState(() {

@@ -1,17 +1,34 @@
+import 'package:patients/models/user_model.dart';
+
 class PatientModel {
-  final String patientId;
-  final String name;
-  final String gender;
-  final String phoneNumber;
-  final int age;
-  final String additionalInformation;
+  String? id;
+  String? name;
+  String? phone;
+  int? age;
+  String? gender;
+  UserModel? user;
 
-  PatientModel(this.additionalInformation, {
-    required this.patientId, 
-    required this.name, 
-    required this.gender, 
-    required this.phoneNumber, 
-    required this.age
-    });
+  PatientModel({this.id, this.name, this.phone, this.age, this.gender, this.user});
 
+  PatientModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    phone = json['phone'];
+    age = json['age'];
+    gender = json['gender'];
+    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['age'] = age;
+    data['gender'] = gender;
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
+    return data;
+  }
 }

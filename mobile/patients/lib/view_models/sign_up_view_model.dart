@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patients/controllers/auth_controller.dart';
-import 'package:patients/logger.dart';
 
-class LoginViewModel extends ChangeNotifier {
+class SignUpViewModel extends ChangeNotifier {
   final AuthController _authController = AuthController.instance;
 
   TextEditingController get emailController => _authController.email;
@@ -26,13 +25,14 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void navigateToSignUp(BuildContext context) {
-    logger.d('Clicou');
     Navigator.pushNamed(context, '/signUp');
   }
 
   void _showAuthenticationError(BuildContext context, String errorMessage) {
-    final snackBar = SnackBar(content: Text(errorMessage));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(content: Text(errorMessage))
+    );
   }
 
 }

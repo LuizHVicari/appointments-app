@@ -1,15 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsStrongPassword } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ApiProperty } from '@nestjs/swagger'
+import { IsEmail, IsStrongPassword } from 'class-validator'
+import { Patient } from 'src/patients/entities/patient.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class User {
-
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
   id: string
 
-  @Column({unique: true})
+  @Column({ unique: true })
   @IsEmail()
   @ApiProperty()
   email: string
@@ -23,4 +23,7 @@ export class User {
   @ApiProperty()
   name: string
 
+  @OneToMany(() => Patient, (patient) => patient.user)
+  @ApiProperty()
+  patients: Patient
 }

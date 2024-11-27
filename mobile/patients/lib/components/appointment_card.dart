@@ -63,7 +63,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text (widget.appointmentModel.patient.name),
+                    Text (widget.appointmentModel.patient.name?? 'No name for this patient'),
                     Text (widget.appointmentModel.place),
                   ],
                 ),  

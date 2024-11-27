@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:patients/components/appointments_list.dart';
 import 'package:patients/components/patients_list.dart';
 import 'package:patients/constants/font_sizes.dart';
-import 'package:patients/constants/home_page_numbers.dart';
 import 'package:patients/constants/paddings.dart';
 import 'package:patients/view_models/home_view_model.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {  
   int _selectedPage = 0;
   final List<Widget> _pages = [
-    PatientsList(),
+    const PatientsList(),
     AppointmentsList()
   ];
 
@@ -34,8 +33,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         title: const Text('Home Page'),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        elevation: 5,
+        shadowColor: Theme.of(context).colorScheme.surfaceBright,
+        
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPage,

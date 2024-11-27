@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:patients/controllers/auth_controller.dart';
 import 'package:patients/dio.dart';
 import 'package:patients/logger.dart';
 import 'package:patients/models/login_model.dart';
@@ -26,8 +27,10 @@ class ApiAuthRepository implements AuthRepositoryInterface{
   }
 
   @override
-  RefreshModel refresh(String refreshToken) {
-    // TODO: implement refresh
-    throw UnimplementedError();
+  Future<RefreshModel> refresh(String refreshToken) async {
+    final response = await dio.post('auth/refresh', data: {
+      'refreshToken': AuthController.instance.loginModel?.refreshToken
+    });
+    return RefreshModel.fromJson(response.data);
   }
 }

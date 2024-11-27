@@ -5,6 +5,6 @@ abstract class AuthRepositoryInterface {
 
   Future<LoginModel?> login(String email,String password);
 
-  RefreshModel refresh(String refreshToken);
+  Future<RefreshModel> refresh(String refreshToken);
 
 }

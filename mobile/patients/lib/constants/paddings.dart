@@ -1,2 +1,2 @@
-const double pagePadding = 8; 
+const double pagePadding = 24; 
 const double cardItemSeparation = 16;
