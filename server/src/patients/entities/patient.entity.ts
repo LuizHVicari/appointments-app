@@ -28,7 +28,7 @@ export class Patient {
 
   @Column()
   @ApiProperty()
-  gender: String
+  gender: string
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user' })

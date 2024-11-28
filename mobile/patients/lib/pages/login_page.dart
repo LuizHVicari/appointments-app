@@ -44,7 +44,8 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: const BorderRadius.only(
                     topLeft: mediumRadius,
                     topRight: mediumRadius,
-                  )),
+                  )
+                ),
               child: Expanded(
                 child: Column(
                   children: [

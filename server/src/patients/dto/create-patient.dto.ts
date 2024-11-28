@@ -27,5 +27,5 @@ export class CreatePatientDto {
   @IsString()
   @IsIn(genders)
   @ApiProperty()
-  gender: String
+  gender: string
 }

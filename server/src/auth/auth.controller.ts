@@ -25,7 +25,10 @@ export class AuthController {
     },
   })
   @ApiUnauthorizedResponse()
-  async login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDto): Promise<{
+    accessToken: string
+    refreshToken: string
+  }> {
     console.info('Login body', body)
     return this.authService.validateUser(body.email, body.password)
   }
@@ -41,7 +44,9 @@ export class AuthController {
     },
   })
   @ApiUnauthorizedResponse()
-  async refresh(@Body() body: RefreshDto) {
+  async refresh(@Body() body: RefreshDto): Promise<{
+    accessToken: string
+  }> {
     return this.authService.refreshToken(body)
   }
 }

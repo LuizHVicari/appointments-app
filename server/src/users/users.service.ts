@@ -20,7 +20,7 @@ export class UsersService {
     private readonly hashingService: HashingServiceProtocol,
   ) {}
 
-  private async saveUser(user: User) {
+  private async saveUser(user: User): Promise<User> {
     try {
       return await this.userRepository.save(user)
     } catch (error) {
@@ -32,7 +32,7 @@ export class UsersService {
     }
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const passwordHash = await this.hashingService.hash(createUserDto.password)
 
     const userData = {
@@ -46,15 +46,24 @@ export class UsersService {
     return await this.saveUser(user)
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`
+  async update(request: Request, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = this.retrieveFromRequest(request)
+    if (updateUserDto.password) {
+      const newPassword = await this.hashingService.hash(updateUserDto.password)
+      user.password = newPassword
+    }
+    user.email = updateUserDto.email ?? user.email
+    user.name = updateUserDto.name ?? user.name
+
+    return await this.saveUser(user)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`
+  async remove(request: Request): Promise<User> {
+    const user = this.retrieveFromRequest(request)
+    return await this.userRepository.remove(user)
   }
 
-  findMe(request: Request) {
+  retrieveFromRequest(request: Request): User {
     const { user }: { user: User } = request[REQUEST_TOKEN_PAYLOAD]
     return user
   }

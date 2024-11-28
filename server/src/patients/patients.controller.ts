@@ -35,14 +35,17 @@ export class PatientsController {
   @ApiCreatedResponse({ type: Patient, description: 'Creates a new patient' })
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
-  create(@Body() createPatientDto: CreatePatientDto, @Req() request: Request) {
+  async create(
+    @Body() createPatientDto: CreatePatientDto,
+    @Req() request: Request,
+  ): Promise<Patient> {
     return this.patientsService.create(createPatientDto, request)
   }
 
   @Get()
   @ApiOkResponse({ type: [Patient] })
   @ApiUnauthorizedResponse()
-  findAll(@Req() request: Request) {
+  async findAll(@Req() request: Request): Promise<Patient[]> {
     return this.patientsService.findAll(request)
   }
 
@@ -50,7 +53,10 @@ export class PatientsController {
   @ApiOkResponse({ type: Patient, description: 'Retrieves a patient by id' })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  findOne(@Param('id') id: string, @Req() request: Request) {
+  async findOne(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ): Promise<Patient> {
     return this.patientsService.findOne(id, request)
   }
 
@@ -68,7 +74,7 @@ export class PatientsController {
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  remove(@Param('id') id: string, @Req() request: Request) {
+  remove(@Param('id') id: string, @Req() request: Request): Promise<Patient> {
     return this.patientsService.remove(id, request)
   }
 }

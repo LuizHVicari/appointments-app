@@ -1,4 +1,4 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from '@nestjs/config'
 
 export default registerAs('app', () => ({
   database: {
@@ -6,5 +6,5 @@ export default registerAs('app', () => ({
     database: process.env.DB_NAME,
     autoLoadEntities: Boolean(process.env.DB_AUTO_LOAD_ENTITIES),
     synchronize: Boolean(process.env.DB_SYNCHRONIZE),
-  }
+  },
 }))

@@ -9,7 +9,6 @@ export class BCryptService extends HashingServiceProtocol {
 
   async compare(password: string, passwordHash: string): Promise<boolean> {
     const equal = await bcCompare(password, passwordHash)
-    console.debug('bcrypt.service.ts', 'compare', equal)
     return equal
   }
 }
