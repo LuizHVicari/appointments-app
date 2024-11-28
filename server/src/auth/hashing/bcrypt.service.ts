@@ -1,4 +1,4 @@
-import { compare as bcCompare, hash as bcHash, genSalt } from 'bcrypt'
+import { compare as bcCompare, hash as bcHash, genSalt } from 'bcryptjs'
 import { HashingServiceProtocol } from './hashing.service'
 
 export class BCryptService extends HashingServiceProtocol {
@@ -12,3 +12,4 @@ export class BCryptService extends HashingServiceProtocol {
     return equal
   }
 }
+

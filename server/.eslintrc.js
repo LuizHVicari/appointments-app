@@ -21,5 +21,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'no-await-in-loop': 'error',
+    'no-dupe-else-if': 'warn',
   },
 }

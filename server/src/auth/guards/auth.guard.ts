@@ -4,14 +4,14 @@ import {
   Inject,
   UnauthorizedException,
 } from '@nestjs/common'
+import { ConfigType } from '@nestjs/config'
 import { JwtService, TokenExpiredError } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Request } from 'express'
+import { REQUEST_TOKEN_PAYLOAD } from 'src/common/constants'
 import { User } from 'src/users/entities/user.entity'
 import { Repository } from 'typeorm'
 import jwtConfig from '../config/jwt.config'
-import { ConfigType } from '@nestjs/config'
-import { REQUEST_TOKEN_PAYLOAD } from 'src/common/constants'
 
 export class AuthenticationGuard implements CanActivate {
   constructor(
@@ -23,6 +23,7 @@ export class AuthenticationGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('bateu no guard')
     try {
       const request: Request = context.switchToHttp().getRequest()
       const { authorization } = request.headers
@@ -37,6 +38,7 @@ export class AuthenticationGuard implements CanActivate {
       })
 
       const user = await this.userRepository.findOneBy({ email: payload.email })
+      console.log(user)
       if (!user) {
         throw new UnauthorizedException('Invalid or expired token')
       }
