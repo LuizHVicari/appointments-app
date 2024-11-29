@@ -1,17 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Patient } from 'src/patients/entities/patient.entity'
+import { IsDateString, IsString, IsUUID } from 'class-validator'
 
 export class CreateAppointmentDto {
-  @ApiProperty({ type: () => Patient })
-  patient: Patient
+  @ApiProperty()
+  @IsUUID()
+  patientId: string
 
   @ApiProperty()
+  @IsDateString()
   date: Date
 
   @ApiProperty()
-  place: string
+  @IsString()
+  place?: string
 
   @ApiProperty()
+  @IsString()
   details?: string
 }
-

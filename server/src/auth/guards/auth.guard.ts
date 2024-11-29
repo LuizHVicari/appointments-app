@@ -23,13 +23,12 @@ export class AuthenticationGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('bateu no guard')
     try {
       const request: Request = context.switchToHttp().getRequest()
       const { authorization } = request.headers
 
       if (!authorization) {
-        throw new UnauthorizedException('Token was not provided')
+        throw new UnauthorizedException()
       }
 
       const authToken = authorization.replace('Bearer', '').trim()
@@ -38,9 +37,8 @@ export class AuthenticationGuard implements CanActivate {
       })
 
       const user = await this.userRepository.findOneBy({ email: payload.email })
-      console.log(user)
       if (!user) {
-        throw new UnauthorizedException('Invalid or expired token')
+        throw new UnauthorizedException()
       }
 
       payload['user'] = user
@@ -48,10 +46,8 @@ export class AuthenticationGuard implements CanActivate {
       return true
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        console.warn('AuthGuard - Token expired')
-        throw new UnauthorizedException('Token has expired')
+        throw new UnauthorizedException()
       }
-
       console.warn(`AuthGuard - Could not authenticate, error: ${error}`)
       throw new UnauthorizedException()
     }

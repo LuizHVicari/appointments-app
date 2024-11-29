@@ -24,7 +24,7 @@ export class PatientsService {
       return await this.patientRepository.save(patient)
     } catch (error) {
       if (error instanceof QueryFailedError) {
-        throw new BadRequestException(error.message)
+        throw new BadRequestException()
       }
       throw error
     }
@@ -51,7 +51,10 @@ export class PatientsService {
 
   async findAll(request: Request): Promise<Patient[]> {
     const user = extractUserFromRequest(request)
-    const patients = await this.patientRepository.findBy({ user: user })
+    const patients = await this.patientRepository.find({
+      where: { user: user },
+      relations: { user: true },
+    })
     return patients
   }
 
@@ -64,11 +67,12 @@ export class PatientsService {
     id: string,
     user: User,
   ): Promise<Patient> {
-    const patient = await this.patientRepository.findOneBy({ id, user })
+    const patient = await this.patientRepository.findOne({
+      where: { id, user },
+      relations: { user: true },
+    })
     if (!patient) {
-      throw new NotFoundException(
-        `No patient with id ${id} and user ${user} found`,
-      )
+      throw new NotFoundException()
     }
     return patient
   }

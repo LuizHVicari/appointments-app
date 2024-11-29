@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsStrongPassword } from 'class-validator'
+import { Appointment } from 'src/appointments/entities/appointment.entity'
 import { Patient } from 'src/patients/entities/patient.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -25,5 +26,9 @@ export class User {
 
   @OneToMany(() => Patient, (patient) => patient.user)
   @ApiProperty()
-  patients: Patient
+  patients: Patient[]
+
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  @ApiProperty()
+  appointments: Appointment[]
 }

@@ -15,23 +15,25 @@ export class Appointment {
   @ApiProperty()
   id: string
 
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.appointments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user' })
   @ApiProperty({ type: () => User })
   user: User
 
-  @ManyToOne(() => Patient, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Patient, (patient) => patient.appointments, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'patient' })
   @ApiProperty({ type: () => Patient })
   patient: Patient
 
   @Column({ type: 'timestamptz' })
   @ApiProperty()
-  date: Date
+  date?: Date
 
   @Column()
   @ApiProperty()
-  place: string
+  place?: string
 
   @Column()
   @ApiProperty()

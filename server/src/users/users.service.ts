@@ -25,10 +25,10 @@ export class UsersService {
       return await this.userRepository.save(user)
     } catch (error) {
       if (error.code === '23505') {
-        throw new ConflictException('Email is already registered')
+        throw new ConflictException()
       }
 
-      throw error
+      throw new BadRequestException()
     }
   }
 
@@ -42,7 +42,7 @@ export class UsersService {
     }
 
     const user = this.userRepository.create(userData)
-    if (!user) throw new BadRequestException('Could not create the user')
+    if (!user) throw new BadRequestException()
     return await this.saveUser(user)
   }
 

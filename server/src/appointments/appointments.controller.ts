@@ -3,49 +3,69 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common'
+import { ApiCreatedResponse } from '@nestjs/swagger'
 import { Request } from 'express'
+import { AuthenticationGuard } from 'src/auth/guards/auth.guard'
 import { AppointmentsService } from './appointments.service'
 import { CreateAppointmentDto } from './dto/create-appointment.dto'
 import { UpdateAppointmentDto } from './dto/update-appointment.dto'
+import { Appointment } from './entities/appointment.entity'
 
+@UseGuards(AuthenticationGuard)
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
-  create(
+  @ApiCreatedResponse()
+  async create(
     @Req() request: Request,
     @Body() createAppointmentDto: CreateAppointmentDto,
-  ) {
-    return this.appointmentsService.create(request, createAppointmentDto)
+  ): Promise<Appointment> {
+    return await this.appointmentsService.create(request, createAppointmentDto)
   }
 
   @Get()
-  findAll() {
-    return this.appointmentsService.findAll()
+  async findAll(@Req() request: Request): Promise<Appointment[]> {
+    return await this.appointmentsService.findAll(request)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentsService.findOne(+id)
+  async findOne(
+    @Req() request: Request,
+    @Param('id') id: string,
+  ): Promise<Appointment> {
+    return await this.appointmentsService.findOne(request, id)
   }
 
   @Patch(':id')
-  update(
+  async update(
+    @Req() request: Request,
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
-  ) {
-    return this.appointmentsService.update(+id, updateAppointmentDto)
+  ): Promise<Appointment> {
+    return await this.appointmentsService.update(
+      request,
+      id,
+      updateAppointmentDto,
+    )
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appointmentsService.remove(+id)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  // @ApiNoContentResponse({ type: Appointment })
+  async remove(
+    @Req() request: Request,
+    @Param('id') id: string,
+  ): Promise<Appointment> {
+    return await this.appointmentsService.remove(request, id)
   }
 }
-

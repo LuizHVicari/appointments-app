@@ -16,5 +16,6 @@ import { PatientsService } from './patients.service'
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
+  exports: [PatientsService],
 })
 export class PatientsModule {}

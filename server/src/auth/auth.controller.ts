@@ -29,7 +29,6 @@ export class AuthController {
     accessToken: string
     refreshToken: string
   }> {
-    console.info('Login body', body)
     return this.authService.validateUser(body.email, body.password)
   }
 

@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Appointment } from 'src/appointments/entities/appointment.entity'
 import { User } from 'src/users/entities/user.entity'
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -36,4 +38,7 @@ export class Patient {
     type: () => User,
   })
   user: User
+
+  @OneToMany(() => Appointment, (appointment) => appointment.patient)
+  appointments: Appointment[]
 }
