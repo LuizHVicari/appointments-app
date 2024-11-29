@@ -25,10 +25,8 @@ export class User {
   name: string
 
   @OneToMany(() => Patient, (patient) => patient.user)
-  @ApiProperty()
   patients: Patient[]
 
   @OneToMany(() => Appointment, (appointment) => appointment.user)
-  @ApiProperty()
   appointments: Appointment[]
 }

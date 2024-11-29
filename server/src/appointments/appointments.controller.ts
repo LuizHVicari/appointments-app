@@ -11,7 +11,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common'
-import { ApiCreatedResponse } from '@nestjs/swagger'
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { Request } from 'express'
 import { AuthenticationGuard } from 'src/auth/guards/auth.guard'
 import { AppointmentsService } from './appointments.service'
@@ -20,12 +27,17 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto'
 import { Appointment } from './entities/appointment.entity'
 
 @UseGuards(AuthenticationGuard)
+@ApiBearerAuth()
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
-  @ApiCreatedResponse()
+  @ApiCreatedResponse({
+    type: Appointment,
+    description: 'Creates a new appointment',
+  })
+  @ApiUnauthorizedResponse()
   async create(
     @Req() request: Request,
     @Body() createAppointmentDto: CreateAppointmentDto,
@@ -34,11 +46,22 @@ export class AppointmentsController {
   }
 
   @Get()
+  @ApiOkResponse({
+    type: [Appointment],
+    description: 'Lists all users appointments',
+  })
+  @ApiUnauthorizedResponse()
   async findAll(@Req() request: Request): Promise<Appointment[]> {
     return await this.appointmentsService.findAll(request)
   }
 
   @Get(':id')
+  @ApiOkResponse({
+    type: Appointment,
+    description: 'Retrieves an appointment from id',
+  })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
   async findOne(
     @Req() request: Request,
     @Param('id') id: string,
@@ -47,6 +70,13 @@ export class AppointmentsController {
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
+    type: Appointment,
+    description: 'Updates the data of an appointment',
+  })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
   async update(
     @Req() request: Request,
     @Param('id') id: string,
@@ -61,11 +91,13 @@ export class AppointmentsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  // @ApiNoContentResponse({ type: Appointment })
+  @ApiNoContentResponse()
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
   async remove(
     @Req() request: Request,
     @Param('id') id: string,
-  ): Promise<Appointment> {
-    return await this.appointmentsService.remove(request, id)
+  ): Promise<void> {
+    await this.appointmentsService.remove(request, id)
   }
 }
