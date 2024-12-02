@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patients/constants/paddings.dart';
 
 class DraggableCard extends StatefulWidget {
   final VoidCallback onSwipe;
@@ -39,18 +40,21 @@ class _DraggableCardState extends State<DraggableCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        widget.background,
-        GestureDetector(
-          onHorizontalDragUpdate: _updateSwipeAmount,
-          onHorizontalDragEnd: _endSwipe,
-          child: Transform.translate(
-            offset: Offset(_swipeAmount, 0),
-            child: widget.child
-          ),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: cardItemSeparation),
+      child: Stack(
+        children: [
+          widget.background,
+          GestureDetector(
+            onHorizontalDragUpdate: _updateSwipeAmount,
+            onHorizontalDragEnd: _endSwipe,
+            child: Transform.translate(
+              offset: Offset(_swipeAmount, 0),
+              child: widget.child
+            ),
+          )
+        ],
+      ),
     );
   }
 }

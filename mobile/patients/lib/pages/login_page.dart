@@ -20,6 +20,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _viewModel = LoginViewModel();
+    Future.delayed(Duration.zero, () async {
+     await _viewModel.verifyUserLogin(context);
+    });
   }
 
   @override

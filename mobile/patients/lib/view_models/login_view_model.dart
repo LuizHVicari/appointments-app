@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:patients/constants/shared_preferences_keys.dart';
 import 'package:patients/controllers/auth_controller.dart';
 import 'package:patients/logger.dart';
+import 'package:patients/models/login_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthController _authController = AuthController.instance;
 
   TextEditingController get emailController => _authController.email;
   TextEditingController get passwordController => _authController.password;
+
+  Future<void> verifyUserLogin(context) async {
+    final preferences = await SharedPreferences.getInstance();
+    final refreshToken = preferences.getString(refreshTokenKey);
+
+    if (refreshToken != null) {
+      AuthController.instance.loginModel = LoginModel(refreshToken: refreshToken);
+      await AuthController.instance.refresh();
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
+
+  }
 
   Future<void> login(BuildContext context) async {
     if (emailController.text == '') {
@@ -19,6 +34,11 @@ class LoginViewModel extends ChangeNotifier {
     }
     try {
       await _authController.login();
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setString(
+        refreshTokenKey,
+         _authController.loginModel!.refreshToken!
+      );
       Navigator.pushReplacementNamed(context, '/home');
     } catch (error) {
       _showAuthenticationError(context, error.toString());
@@ -26,7 +46,6 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void navigateToSignUp(BuildContext context) {
-    logger.d('Clicou');
     Navigator.pushNamed(context, '/signUp');
   }
 

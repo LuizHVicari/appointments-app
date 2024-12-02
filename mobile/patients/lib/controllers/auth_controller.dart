@@ -15,7 +15,9 @@ class AuthController {
   final AuthRepositoryInterface _authRepository = ApiAuthRepository();
 
   Future<String> refresh() async {
-    return '';
+    final refreshModel = await _authRepository.refresh(loginModel!.refreshToken!);
+    loginModel = LoginModel(refreshToken: loginModel!.refreshToken!, accessToken: refreshModel.accessToken);
+    return refreshModel.accessToken!;
   }
 
   Future<void> login() async {

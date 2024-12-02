@@ -38,4 +38,8 @@ export class Appointment {
   @Column()
   @ApiProperty()
   details?: string
+
+  @Column({ type: 'boolean', default: false })
+  @ApiProperty()
+  confirmed?: boolean
 }

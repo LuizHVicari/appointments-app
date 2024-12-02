@@ -28,4 +28,8 @@ class PatientDetailsViewModel extends ChangeNotifier {
       builder: (context) => AlertDialog(content: Text(text))
     );
   }
+
+  void navigateToCreateAppointmentPage(BuildContext context, PatientModel patient) {
+    Navigator.of(context).pushNamed('/createAppointment', arguments: patient);
+  }
 }

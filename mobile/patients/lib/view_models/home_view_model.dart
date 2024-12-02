@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:patients/constants/home_page_numbers.dart';
+import 'package:patients/constants/shared_preferences_keys.dart';
 import 'package:patients/controllers/auth_controller.dart';
 import 'package:patients/logger.dart';
 import 'package:patients/models/user_model.dart';
 import 'package:patients/repositories/api_user_repository.dart';
 import 'package:patients/repositories/user_repository_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final UserRepositoryInterface userRepository = ApiUserRepository();
@@ -32,7 +34,7 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
     user = null;
     isLoading = false;
     AuthController.instance.email.text = '';
@@ -40,30 +42,24 @@ class HomeViewModel extends ChangeNotifier {
     AuthController.instance.loginModel?.accessToken = '';
     AuthController.instance.loginModel?.refreshToken = '';
     notifyListeners();
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.remove(refreshTokenKey);
     Navigator.of(context).pushReplacementNamed('/');
 
   }
 
-  Widget buildFab(BuildContext context, int currentPage) {
-
-    String label = '';
-    String route = '';
-    late Icon icon; 
-
-    switch (currentPage) {
-      case patientsPage:
-        label = 'Create patient';
-        icon = const Icon(Icons.person);
-        route = '/createPatient';
-      case appointmentsPage:
-        label = 'Create appointment';
-        icon = const Icon(Icons.event);
-        route = '/home';
+  Widget? buildFab(BuildContext context, int currentPage) {
+    if (currentPage == appointmentsPage) {
+      return null;
     }
+ 
+    const label = 'Create patient';
+    const icon = Icon(Icons.person);
+    const route = '/createPatient';
 
     return FloatingActionButton.extended(
       onPressed: () => Navigator.of(context).pushNamed(route), 
-      label: Text(label),
+      label: const Text(label),
       icon: icon,
       foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
     ); 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsDateString, IsString, IsUUID } from 'class-validator'
+import { IsBoolean, IsDateString, IsString, IsUUID } from 'class-validator'
 
 export class CreateAppointmentDto {
   @ApiProperty()
@@ -17,4 +17,8 @@ export class CreateAppointmentDto {
   @ApiProperty()
   @IsString()
   details?: string
+
+  @ApiProperty()
+  @IsBoolean()
+  confirmed: boolean = false
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:patients/constants/font_sizes.dart';
 
+// ignore: must_be_immutable
 class InformationRow extends StatelessWidget {
 
   final String label;
   final String info;
+  double? fontSize;
 
 
-  const InformationRow({super.key, required this.label, required this.info});
+  InformationRow({super.key, required this.label, required this.info, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +17,12 @@ class InformationRow extends StatelessWidget {
       children: [ 
         Text( 
           '$label: ', 
-          style: const TextStyle(fontSize: fontMedium)), 
+          style: TextStyle(fontSize: fontSize ?? fontMedium)), 
         Text(
           info, 
           textAlign: TextAlign.justify,
-          style: const TextStyle(
-            fontSize: fontMedium,
+          style: TextStyle(
+            fontSize: fontSize ?? fontMedium,
           )
         ),
       ]

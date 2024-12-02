@@ -42,6 +42,7 @@ dependencies:
   logger: ^2.5.0
   provider: ^6.1.2
   keyboard_dismisser: ^3.0.0
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

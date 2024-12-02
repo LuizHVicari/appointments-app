@@ -4,7 +4,7 @@ import 'package:patients/logger.dart';
 
 final dio = Dio(
   BaseOptions(
-    baseUrl: 'http://172.27.176.1:3000/',
+    baseUrl: 'http://192.168.0.103:3000/',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 10)
   )
@@ -19,12 +19,10 @@ addInterceptors() {
         if (accessToken != null && accessToken.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $accessToken';
         }
-        logger.i(options.headers);
         return handler.next(options);
       },
       onError: (DioException e, handler) async {
         try {  
-          logger.i('Authentication error, retrying');
           final refreshToken = AuthController.instance.loginModel?.refreshToken;
           if (e.response?.statusCode == 401 && refreshToken != null && refreshToken.isNotEmpty) {
             logger.i('Retrieving token from refresh', time: DateTime.now());

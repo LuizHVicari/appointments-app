@@ -11,7 +11,7 @@ class PatientCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.surface,
+     
       elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(pagePadding),
@@ -20,21 +20,23 @@ class PatientCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(height: 50, width: 50, color: Colors.teal),
-                const SizedBox(width: cardItemSeparation),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    cardText(context: context, text: patient.name ?? '', fontWeight: FontWeight.bold),
-                    cardText(context: context, text: patient.phone ?? '')
+                    cardText(context: context, text: patient.name ?? '', fontWeight: FontWeight.bold, sizeMultiplication: 3),
+                    cardText(context: context, text: patient.phone ?? '', sizeMultiplication: 3)
                   ],
                 ),
                 const SizedBox(width: cardItemSeparation),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    cardText(context: context, text: patient.age.toString()),
-                    patient.gender == 'male' ? const Icon(Icons.male) : patient.gender == 'female' ? const Icon(Icons.female) : const Icon(Icons.person),
+                    cardText(context: context, text: patient.age.toString(), sizeMultiplication: 1),
+                    patient.gender == 'Male' 
+                      ? Icon(Icons.male, color: Theme.of(context).colorScheme.onPrimaryContainer,) 
+                      : patient.gender == 'female' 
+                        ? Icon(Icons.female, color: Theme.of(context).colorScheme.onPrimaryContainer,) 
+                        :  Icon(Icons.person, color: Theme.of(context).colorScheme.onPrimaryContainer,),
                   ],
                 ),
               ],
@@ -46,7 +48,7 @@ class PatientCard extends StatelessWidget {
               ), 
               icon: Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
                 )
             )
           ],
@@ -58,15 +60,20 @@ class PatientCard extends StatelessWidget {
   Widget cardText({
     required BuildContext context,
     required String text, 
+    int? sizeMultiplication = 2,
     double fontSize = fontMedium, 
     FontWeight fontWeight =  FontWeight.normal
   }) {
-    return Text(
-      text.capitalize(),
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSecondaryContainer,
-        fontWeight: fontWeight,
-        fontSize: fontSize
+    var multiplier = sizeMultiplication ?? 2;
+    return SizedBox(
+      width: (MediaQuery.of(context).size.width / 8) * multiplier,
+      child: Text(
+        text.capitalize(),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+          fontWeight: fontWeight,
+          fontSize: fontSize
+        ),
       ),
     );
 
