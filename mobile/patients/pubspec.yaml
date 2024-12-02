@@ -43,6 +43,7 @@ dependencies:
   provider: ^6.1.2
   keyboard_dismisser: ^3.0.0
   shared_preferences: ^2.3.3
+  flutter_multi_formatter: ^2.13.0
 
 dev_dependencies:
   flutter_test:

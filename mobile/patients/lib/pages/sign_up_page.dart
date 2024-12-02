@@ -4,7 +4,7 @@ import 'package:patients/components/default_button.dart';
 import 'package:patients/components/default_input_text.dart';
 import 'package:patients/constants/paddings.dart';
 import 'package:patients/constants/radius.dart';
-import 'package:patients/view_models/login_view_model.dart';
+import 'package:patients/view_models/sign_up_view_model.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -14,13 +14,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  late LoginViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = LoginViewModel();
-  }
+  late final SignUpViewModel _viewModel = SignUpViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     DefaultInputText(
                       label: 'Name', 
                       keyboardType: TextInputType.name,
-                      textController: _viewModel.emailController,
+                      textController: _viewModel.nameController,
                     ),
                     const SizedBox(height: 8,),
                     DefaultInputText(
@@ -70,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     DefaultInputText(
                       label: 'Confirm password', 
                       keyboardType: TextInputType.visiblePassword,
-                      textController: _viewModel.passwordController,
+                      textController: _viewModel.confirmPasswordController,
                       canToggleVisibility: true,
                     ),
                     const SizedBox(height: 24,),
@@ -95,6 +89,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         ],
                       ),
                     ),
+                    const Text('Password must be at least 8 characters long'),
+                    const Text('Password must contain one lower case character'),
+                    const Text('Password must contain one upper case character'),
+                    const Text('Password must contain one special character'),
                   ],
                 ),
               ),

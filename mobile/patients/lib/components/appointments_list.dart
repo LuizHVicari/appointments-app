@@ -46,24 +46,26 @@ class _AppointmentsListState extends State<AppointmentsList> with WidgetsBinding
           child: CircularProgressIndicator(),
         );
       }
-
-      if (viewModel.appointments.isEmpty) {
-        return const Text('No appointments to display');
-      }
-     
       return RefreshIndicator(
         onRefresh: () async => await viewModel.listAppointments(context),
-        child: ListView.builder(
-          itemCount: viewModel.appointments.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index){
-            final appointment = viewModel.appointments[index];
-            if (appointment != null) {
-              return AppointmentCard(appointmentModel: appointment);
-            } 
-            return const SizedBox.shrink(); 
-
-          }
+        child: viewModel.appointments.isEmpty    
+          ? SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: const Text('No appointments to display')
+              ),
+            )
+          : ListView.builder(
+            itemCount: viewModel.appointments.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index){
+              final appointment = viewModel.appointments[index];
+              if (appointment != null) {
+                return AppointmentCard(appointmentModel: appointment);
+              } 
+              return const SizedBox.shrink(); 
+            }
         ),
       );
     });

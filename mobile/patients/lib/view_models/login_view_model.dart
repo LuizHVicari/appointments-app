@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:patients/constants/shared_preferences_keys.dart';
 import 'package:patients/controllers/auth_controller.dart';
-import 'package:patients/logger.dart';
 import 'package:patients/models/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
