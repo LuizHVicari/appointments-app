@@ -11,7 +11,7 @@ class AppointmentModel {
   bool? confirmed;
 
   AppointmentModel(
-      {this.id, this.user, this.patient, this.date, this.place, this.details, required bool confirmed});
+      {this.id, this.user, this.patient, this.date, this.place, this.details, this.confirmed});
 
   AppointmentModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,7 +21,7 @@ class AppointmentModel {
     date = DateTime.parse(json['date']);
     place = json['place'];
     details = json['details'];
-    confirmed = json['confirmed'];
+    confirmed = json['confirmed'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

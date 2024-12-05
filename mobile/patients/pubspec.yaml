@@ -44,6 +44,7 @@ dependencies:
   keyboard_dismisser: ^3.0.0
   shared_preferences: ^2.3.3
   flutter_multi_formatter: ^2.13.0
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+
+  build_runner: ^2.4.13
+  coverage: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -20,6 +20,9 @@ class MainActivity: FlutterActivity() {
                 val battery = "100"
                 val bm: BatteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
                 val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+                if (batLevel == -1) {
+                    result.error("Error", "Could not get battery level", null)
+                }
                 result.success(batLevel.toString())
             } else {
                 result.notImplemented()
