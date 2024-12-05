@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:patients/constants/home_page_numbers.dart';
 import 'package:patients/constants/shared_preferences_keys.dart';
 import 'package:patients/controllers/auth_controller.dart';
@@ -6,12 +7,14 @@ import 'package:patients/logger.dart';
 import 'package:patients/models/user_model.dart';
 import 'package:patients/repositories/api_user_repository.dart';
 import 'package:patients/repositories/user_repository_interface.dart';
+import 'package:patients/view_models/show_error_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class HomeViewModel extends ShowErrorViewModel with ChangeNotifier {
   final UserRepositoryInterface userRepository = ApiUserRepository();
   UserModel? user;
   bool isLoading = true;
+  final MethodChannel _channel = const MethodChannel('com.example.patients/channel');
 
   Future<void> getUserInfo(BuildContext context) async {
     if (user != null) {
@@ -64,5 +67,14 @@ class HomeViewModel extends ChangeNotifier {
       foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
     ); 
 
+
+  }
+  void getBattery(BuildContext context) async {
+    try {
+      final String result = await _channel.invokeMethod('getBattery');
+      showError(context, 'Battery level $result');
+    } on PlatformException catch (error) {
+      showError(context, error.toString());
+    }
   }
 }

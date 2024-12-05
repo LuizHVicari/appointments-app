@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedPage = 0;
   final List<Widget> _pages = [
     const PatientsList(),
-    AppointmentsList()
+    const AppointmentsList()
   ];
 
   @override
@@ -80,6 +80,12 @@ class _HomePageState extends State<HomePage> {
                       viewModel.logout(context);
                     }, 
                     child: const Text('Logout', style: TextStyle(fontSize: fontMedium),)
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      viewModel.getBattery(context);
+                    },
+                    child: const Text('Verify Battery', style: TextStyle(fontSize: fontMedium),)
                   )
                 ],
               ),
