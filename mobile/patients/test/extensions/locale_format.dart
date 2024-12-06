@@ -23,12 +23,12 @@ void main() {
       );
     });
 
-    testWidgets('localeFormat should format DateTime for different locale (e.g., fr_FR)', (WidgetTester tester) async {
+    testWidgets('localeFormat should format DateTime for different locale (e.g., pt_BR)', (WidgetTester tester) async {
       final dateTime = DateTime(2024, 12, 4, 15, 30);
 
       await tester.pumpWidget(
         MaterialApp(
-          locale: const Locale('fr', 'FR'),
+          locale: const Locale('pt', 'BR'),
           home: Scaffold(
             body: Builder(
               builder: (context) {

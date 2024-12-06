@@ -12,4 +12,3 @@ export default registerAs('app', () => ({
     synchronize: Boolean(process.env.DB_SYNCHRONIZE),
   },
 }))
-

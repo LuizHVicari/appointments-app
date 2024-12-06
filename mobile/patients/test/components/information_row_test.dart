@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:patients/components/information_row.dart'; // Adjust the import path
-import 'package:patients/constants/font_sizes.dart'; // If necessary for font sizes
+import 'package:patients/components/information_row.dart';
+import 'package:patients/constants/font_sizes.dart';
 
 void main() {
   testWidgets('InformationRow displays label and info correctly', (WidgetTester tester) async {

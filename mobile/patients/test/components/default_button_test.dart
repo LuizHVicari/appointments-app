@@ -9,7 +9,6 @@ void main() {
       isPressed = true;
     }
 
-    // Build the widget
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
